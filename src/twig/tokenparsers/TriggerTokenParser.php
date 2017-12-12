@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * @copyright  Copyright (c) Flipbox Digital Limited
+ * @license    https://github.com/flipboxfactory/twig-trigger/blob/master/LICENSE.md
+ * @link       https://github.com/flipboxfactory/twig-trigger
+ */
+
 namespace flipbox\twig\tokenparsers;
 
 use flipbox\twig\nodes\TriggerNode;
@@ -8,6 +14,10 @@ use Twig_Error_Syntax;
 use Twig_Node_Text;
 use Twig_Token;
 
+/**
+ * @author Flipbox Factory <hello@flipboxfactory.com>
+ * @since 1.0.0
+ */
 class TriggerTokenParser extends \Twig_TokenParser
 {
     use PrefixTrait;

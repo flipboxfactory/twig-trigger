@@ -1,8 +1,9 @@
 <?php
+
 /**
- * @link      https://craftcms.com/
- * @copyright Copyright (c) Pixel & Tonic, Inc.
- * @license   https://craftcms.github.io/license/
+ * @copyright  Copyright (c) Flipbox Digital Limited
+ * @license    https://github.com/flipboxfactory/twig-trigger/blob/master/LICENSE.md
+ * @link       https://github.com/flipboxfactory/twig-trigger
  */
 
 namespace flipbox\twig;
@@ -11,6 +12,10 @@ use flipbox\twig\tokenparsers\TriggerTokenParser;
 use flipbox\twig\traits\PrefixTrait;
 use Twig_Extension;
 
+/**
+ * @author Flipbox Factory <hello@flipboxfactory.com>
+ * @since 1.0.0
+ */
 class TriggerExtension extends Twig_Extension
 {
     use PrefixTrait;
