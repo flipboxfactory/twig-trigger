@@ -1,7 +1,7 @@
 {
   "name": "flipboxfactory/twig-trigger",
   "description": "A TWIG trigger token",
-  "version": "1.0.0.rc.1.1",
+  "version": "1.0.0-rc.2",
   "require": {
     "craftcms/cms": "~3.0.0-RC1"
   },
