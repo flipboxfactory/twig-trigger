@@ -56,7 +56,7 @@ class TriggerTokenParser extends \Twig_TokenParser
         ];
 
         // Look for value as an attribute
-        $this->parseValueAttribute();
+        $variables['capture'] = $this->parseValueAttribute($nodes);
 
         // Params 'with'
         $variables['params'] = $this->parseWith();
@@ -66,16 +66,18 @@ class TriggerTokenParser extends \Twig_TokenParser
 
         // Is there a closing tag?
         if ($variables['capture']) {
-            $this->parseValueBetweenTags();
+            $this->parseValueBetweenTags($nodes);
         }
 
         return new TriggerNode($nodes, $variables, $line, $this->getTag());
     }
 
     /**
+     * @param array $nodes
+     * @return bool
      * @throws Twig_Error_Syntax
      */
-    protected function parseValueAttribute()
+    protected function parseValueAttribute(array &$nodes): bool
     {
         $parser = $this->parser;
         $stream = $parser->getStream();
@@ -84,15 +86,19 @@ class TriggerTokenParser extends \Twig_TokenParser
         // Look for value as a param
         if ($stream->nextIf(Twig_Token::NAME_TYPE, 'value')) {
             $stream->expect(Twig_Token::OPERATOR_TYPE, '=');
-            $variables['capture'] = false;
+
             $nodes['value'] = $expressionParser->parseExpression();
+            return false;
         }
+
+        return true;
     }
 
     /**
+     * @param array $nodes
      * @throws Twig_Error_Syntax
      */
-    protected function parseValueBetweenTags()
+    protected function parseValueBetweenTags(array &$nodes)
     {
         $parser = $this->parser;
         $stream = $parser->getStream();

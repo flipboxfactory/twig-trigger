@@ -40,7 +40,6 @@ class TriggerNode extends Twig_Node
             ->write('Craft::$app->getView()->trigger(');
 
         $this->eventName($compiler);
-
         $compiler->raw(", \$event);\n\n");
 
         $compiler->write("echo \$event->value;");
@@ -51,15 +50,20 @@ class TriggerNode extends Twig_Node
      */
     protected function compileValue(Twig_Compiler $compiler)
     {
+        if (!$this->hasNode('value')) {
+            $compiler->write("\$value = null;\n");
+            return;
+        }
+
         $value = $this->getNode('value');
         if ($this->getAttribute('capture')) {
             $compiler
                 ->write("ob_start();\n")
                 ->subcompile($value)
-                ->raw("\$value = ob_get_clean();\n");
+                ->write("\$value = ob_get_clean();\n");
         } else {
             $compiler
-                ->raw("\$value = ")
+                ->write("\$value = ")
                 ->subcompile($value)
                 ->raw(";\n");
         }
@@ -86,9 +90,9 @@ class TriggerNode extends Twig_Node
         if ($node && $node instanceof Twig_Node_Expression_Constant) {
             $prefix = '';
             if ($this->hasAttribute('prefix')) {
-                $prefix = $this->getAttribute('prefix').'.';
+                $prefix = $this->getAttribute('prefix') . '.';
             }
-            $compiler->raw("'".$prefix . $node->getAttribute('value')."'");
+            $compiler->raw("'" . $prefix . $node->getAttribute('value') . "'");
             return;
         }
 
