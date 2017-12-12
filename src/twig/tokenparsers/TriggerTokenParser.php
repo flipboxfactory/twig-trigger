@@ -9,7 +9,6 @@
 namespace flipbox\twig\tokenparsers;
 
 use flipbox\twig\nodes\TriggerNode;
-use flipbox\twig\traits\PrefixTrait;
 use Twig_Error_Syntax;
 use Twig_Node_Text;
 use Twig_Token;
@@ -20,22 +19,12 @@ use Twig_Token;
  */
 class TriggerTokenParser extends \Twig_TokenParser
 {
-    use PrefixTrait;
-
-    /**
-     * @param string|null $prefix
-     */
-    public function __construct(string $prefix = null)
-    {
-        $this->prefix = $prefix;
-    }
-
     /**
      * @inheritdoc
      */
     public function getTag()
     {
-        return $this->getPrefixTrigger();
+        return 'trigger';
     }
 
     /**
@@ -51,7 +40,6 @@ class TriggerTokenParser extends \Twig_TokenParser
         ];
 
         $variables = [
-            'prefix' => $this->prefix,
             'capture' => true
         ];
 

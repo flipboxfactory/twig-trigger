@@ -86,16 +86,6 @@ class TriggerNode extends Twig_Node
      */
     protected function eventName(Twig_Compiler $compiler)
     {
-        $node = $this->getNode('event');
-        if ($node && $node instanceof Twig_Node_Expression_Constant) {
-            $prefix = '';
-            if ($this->hasAttribute('prefix')) {
-                $prefix = $this->getAttribute('prefix') . '.';
-            }
-            $compiler->raw("'" . $prefix . $node->getAttribute('value') . "'");
-            return;
-        }
-
         $compiler->subcompile($this->getNode('event'), false);
         return;
     }
