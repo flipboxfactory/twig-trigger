@@ -1,0 +1,22 @@
+{
+  "name": "flipboxfactory/twig-trigger",
+  "description": "A TWIG trigger token",
+  "version": "1.0.0.rc.1",
+  "require": {
+    "craftcms/cms": "~3.0.0-RC1"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^5.0",
+    "squizlabs/php_codesniffer": "^2.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "flipbox\\twig\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "flipbox\\twig\\tests\\": "tests/src/"
+    }
+  }
+}
