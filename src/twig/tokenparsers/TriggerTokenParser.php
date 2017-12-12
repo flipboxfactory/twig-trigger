@@ -45,10 +45,9 @@ class TriggerTokenParser extends \Twig_TokenParser
     {
         $line = $token->getLine();
         $parser = $this->parser;
-        $stream = $parser->getStream();
-        $expressionParser = $this->parser->getExpressionParser();
+
         $nodes = [
-            'event' => $expressionParser->parseExpression()
+            'event' => $this->parser->getExpressionParser()->parseExpression()
         ];
 
         $variables = [
@@ -56,26 +55,50 @@ class TriggerTokenParser extends \Twig_TokenParser
             'capture' => true
         ];
 
+        // Look for value as an attribute
+        $this->parseValueAttribute();
+
+        // Params 'with'
+        $variables['params'] = $this->parseWith();
+
+        // Close out opening tag
+        $parser->getStream()->expect(Twig_Token::BLOCK_END_TYPE);
+
+        // Is there a closing tag?
+        if ($variables['capture']) {
+            $this->parseValueBetweenTags();
+        }
+
+        return new TriggerNode($nodes, $variables, $line, $this->getTag());
+    }
+
+    /**
+     * @throws Twig_Error_Syntax
+     */
+    protected function parseValueAttribute()
+    {
+        $parser = $this->parser;
+        $stream = $parser->getStream();
+        $expressionParser = $this->parser->getExpressionParser();
+
         // Look for value as a param
         if ($stream->nextIf(Twig_Token::NAME_TYPE, 'value')) {
             $stream->expect(Twig_Token::OPERATOR_TYPE, '=');
             $variables['capture'] = false;
             $nodes['value'] = $expressionParser->parseExpression();
         }
+    }
 
-        // Params 'with'
-        $variables['params'] = $this->parseWith();
+    /**
+     * @throws Twig_Error_Syntax
+     */
+    protected function parseValueBetweenTags()
+    {
+        $parser = $this->parser;
+        $stream = $parser->getStream();
 
-        // Close out opening tag
+        $nodes['value'] = $parser->subparse(array($this, 'decideBlockEnd'), true);
         $stream->expect(Twig_Token::BLOCK_END_TYPE);
-
-        // Is there a closing tag?
-        if ($variables['capture']) {
-            $nodes['value'] = $parser->subparse(array($this, 'decideBlockEnd'), true);
-            $stream->expect(Twig_Token::BLOCK_END_TYPE);
-        }
-
-        return new TriggerNode($nodes, $variables, $line, $this->getTag());
     }
 
     /**
@@ -84,8 +107,7 @@ class TriggerTokenParser extends \Twig_TokenParser
      */
     protected function parseWith()
     {
-        $parser = $this->parser;
-        $stream = $parser->getStream();
+        $stream = $this->parser->getStream();
         $expressionParser = $this->parser->getExpressionParser();
 
         // Is there an options param?
